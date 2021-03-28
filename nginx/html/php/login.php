@@ -18,10 +18,15 @@ if (isset($_POST["password"])) {
         if ($password =='') { 
             unset($password);} }
 
+if (isset($_POST["email"])) { 
+        $email = $_POST["email"]; 
+        if ($email =='') { 
+            unset($email);} }
+
 var_dump($login, $password);
 
     //заносим введенный пользователем пароль в переменную $password, если он пустой, то уничтожаем переменную
- if (empty($login) or empty($password)) //если пользователь не ввел логин или пароль, то выдаем ошибку и останавливаем скрипт
+ if (empty($login) or empty($password) or empty($email)) //если пользователь не ввел логин или пароль, то выдаем ошибку и останавливаем скрипт
     {
     exit ("Вы ввели не всю информацию, вернитесь назад и заполните все поля!");
     }
@@ -30,9 +35,12 @@ var_dump($login, $password);
     $login = htmlspecialchars($login);
     $password = stripslashes($password);
     $password = htmlspecialchars($password);
+    $email = stripslashes($password);
+    $email = htmlspecialchars($password);
  //удаляем лишние пробелы
     $login = trim($login);
     $password = trim($password);
+    $email = trim($email);
  // подключаемся к базе
 
     $sql_select = "SELECT id FROM users WHERE login='$login'";
@@ -48,7 +56,7 @@ var_dump($login, $password);
     exit ("Извините, введённый вами логин уже зарегистрирован. Введите другой логин.");
     }
  // если такого нет, то сохраняем данные
-    $sql_insert = "INSERT INTO users (login, password) VALUES('$login','$password')";
+    $sql_insert = "INSERT INTO users (login, password, email) VALUES('$login','$password', '$email')";
 
     $result_insert = $mysqli->query($sql_insert);
 
@@ -56,7 +64,7 @@ var_dump($login, $password);
     // Проверяем, есть ли ошибки
     if ($result_insert == true)
     {
-    echo "Вы успешно зарегистрированы! Теперь вы можете зайти на сайт. <a href='index.php'>Главная страница</a>";
+    echo "Вы успешно зарегистрированы! Теперь вы можете зайти на сайт. <a href='http://localhost'>Главная страница</a>";
     }
  else {
     echo "Ошибка! Вы не зарегистрированы.";
